@@ -1,5 +1,6 @@
 package storage;
 
+import lombok.extern.slf4j.Slf4j;
 import model.Princess;
 
 import java.sql.Connection;
@@ -8,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 public class Storage {
     public List<Princess> getAll()  {
         List<Princess> princessList = new ArrayList<>();
@@ -19,13 +20,13 @@ public class Storage {
 
 
         try (Connection conn = DriverManager.getConnection(url, username, password)) {
-            System.out.println("conn - ок ");
+            log.info("conn - ок ");
             String sql = "SELECT * FROM princess";
-            System.out.println("sql - ок");
+            log.info("sql - ок");
             Statement statement = conn.createStatement();
-            System.out.println("conn.createStatement() - ок ");
+            log.info("conn.createStatement() - ок ");
             ResultSet result = statement.executeQuery(sql);
-            System.out.println("statement.executeQuery(sql) - ок ");
+            log.debug("statement.executeQuery(sql) - ок ");
             while (result.next()) {
                 Princess princess = new Princess();
                 princess.setName(result.getString("name"));
@@ -33,7 +34,7 @@ public class Storage {
                 princessList.add(princess);
             }
         } catch (Exception e) {
-            System.out.println("Sudenly, it is error:(");
+            log.error("Sudenly, it is error:(");
             e.printStackTrace();
         }
         return princessList;
